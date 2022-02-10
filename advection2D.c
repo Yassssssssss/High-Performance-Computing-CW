@@ -10,6 +10,8 @@ Outputs: initial.dat - inital values of u(x,y)
 
          Compile with: gcc -o advection2D -std=c99 advection2D.c -lm
 
+         gcc -fopenmp -o advection2D -std=c99 advection2D.c -lm
+
 Notes: The time step is calculated using the CFL condition
 
 ********************************************************************************/
