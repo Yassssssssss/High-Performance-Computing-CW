@@ -22,6 +22,7 @@ Notes: The time step is calculated using the CFL condition
 
 #include <stdio.h>
 #include <math.h>
+#include <omp.h>
 
 /*********************************************************************
                       Main function
