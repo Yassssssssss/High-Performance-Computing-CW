@@ -27,7 +27,19 @@ Notes: The time step is calculated using the CFL condition
 /*********************************************************************
                       Main function
 **********************************************************************/
-
+/*float velx(float z){
+    float vx = 0.0;
+    float z0 = 1.0;
+    if (z > 1.0) {
+      float vx = (0.2/0.41)* log(z/z0);
+      return vx;
+      }
+    else if (z == -1.0){
+      return vx = 1;
+    }
+    return vx;
+  }
+*/
 int main(){
 
   /* Grid properties */
