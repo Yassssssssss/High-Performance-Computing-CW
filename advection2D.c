@@ -27,11 +27,11 @@ Notes: The time step is calculated using the CFL condition
 /*********************************************************************
                       Main function
 **********************************************************************/
-/*float velx(float z){
+float velx(float z){
     float vx = 0.0;
     float z0 = 1.0;
-    if (z > 1.0) {
-      float vx = (0.2/0.41)* log(z/z0);
+    if (z > z0) {
+      vx = (0.2/0.41)* log(z/z0);
       return vx;
       }
     else if (z == -1.0){
@@ -39,12 +39,12 @@ Notes: The time step is calculated using the CFL condition
     }
     return vx;
   }
-*/
+
 int main(){
 
   /* Grid properties */
   const int NX=1000;    // Number of x points
-  const int NY=1000;    // Number of y points
+  const int NY=100;    // Number of y points
   const float xmin=0.0; // Minimum x value
   const float xmax=30.0; // Maximum x value
   const float ymin=0.0; // Minimum y value
@@ -69,7 +69,7 @@ int main(){
   const int nsteps=800; // Number of time steps
 
   /* Velocity */
-  const float velx=1.0; // Velocity in x direction
+  //const float velx=-0.01; // Velocity in x direction
   const float vely=0.0; // Velocity in y direction
   
   /* Arrays to store variables. These have NX+2 elements
@@ -88,7 +88,7 @@ int main(){
   
   /* Calculate time step using the CFL condition */
   /* The fabs function gives the absolute value in case the velocity is -ve */
-  float dt = CFL / ( (fabs(velx) / dx) + (fabs(vely) / dy) );
+  float dt = CFL / ( (fabs(velx(-1)) / dx) + (fabs(vely) / dy) );
   
   /*** Report information about the calculation ***/
   printf("Grid spacing dx     = %g\n", dx);
@@ -97,17 +97,19 @@ int main(){
   printf("Time step           = %g\n", dt);
   printf("No. of time steps   = %d\n", nsteps);
   printf("End time            = %g\n", dt*(float) nsteps);
-  printf("Distance advected x = %g\n", velx*dt*(float) nsteps);
+  printf("Distance advected x = %g\n", velx(-1)*dt*(float) nsteps);
   printf("Distance advected y = %g\n", vely*dt*(float) nsteps);
 
   /*** Place x points in the middle of the cell ***/
   /* LOOP 1 */
+  #pragma omp parallel for
   for (int i=0; i<NX+2; i++){
     x[i] = ( (float) i - 0.5) * dx;
   }
 
   /*** Place y points in the middle of the cell ***/
   /* LOOP 2 */
+  #pragma omp parallel for
   for (int j=0; j<NY+2; j++){
     y[j] = ( (float) j - 0.5) * dy;
   }
@@ -118,7 +120,8 @@ int main(){
     for (int j=0; j<NY+2; j++){
       x2      = (x[i]-x0) * (x[i]-x0);
       y2      = (y[j]-y0) * (y[j]-y0);
-      u[i][j] = exp( -1.0 * ( (x2/(2.0*sigmax2)) + (y2/(2.0*sigmay2)) ) );
+      u[i][j] = exp( -1.0 * (( x2/(2.0*sigmax2)) + (y2/(2.0*sigmay2)) ) );
+      
     }
   }
 
@@ -126,6 +129,7 @@ int main(){
   FILE *initialfile;
   initialfile = fopen("initial.dat", "w");
   /* LOOP 4 */
+  #pragma omp single
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
       fprintf(initialfile, "%g %g %g\n", x[i], y[j], u[i][j]);
@@ -139,6 +143,7 @@ int main(){
     
     /*** Apply boundary conditions at u[0][:] and u[NX+1][:] ***/
     /* LOOP 6 */
+    #pragma omp parallel for
     for (int j=0; j<NY+2; j++){
       u[0][j]    = bval_left;
       u[NX+1][j] = bval_right;
@@ -146,6 +151,7 @@ int main(){
 
     /*** Apply boundary conditions at u[:][0] and u[:][NY+1] ***/
     /* LOOP 7 */
+    #pragma omp parallel for
     for (int i=0; i<NX+2; i++){
       u[i][0]    = bval_lower;
       u[i][NY+1] = bval_upper;
@@ -154,9 +160,10 @@ int main(){
     /*** Calculate rate of change of u using leftward difference ***/
     /* Loop over points in the domain but not boundary values */
     /* LOOP 8 */
+    #pragma omp parallel for
     for (int i=1; i<NX+1; i++){
       for (int j=1; j<NY+1; j++){
-	dudt[i][j] = -velx * (u[i][j] - u[i-1][j]) / dx
+	dudt[i][j] = -velx(y[j]) * (u[i][j] - u[i-1][j]) / dx
 	            - vely * (u[i][j] - u[i][j-1]) / dy;
       }
     }
@@ -164,9 +171,11 @@ int main(){
     /*** Update u from t to t+dt ***/
     /* Loop over points in the domain but not boundary values */
     /* LOOP 9 */
+    #pragma omp parallel for
     for	(int i=1; i<NX+1; i++){
       for (int j=1; j<NY+1; j++){
 	u[i][j] = u[i][j] + dudt[i][j] * dt;
+
       }
     }
     
@@ -176,6 +185,7 @@ int main(){
   FILE *finalfile;
   finalfile = fopen("final.dat", "w");
   /* LOOP 10 */
+  #pragma omp single
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
       fprintf(finalfile, "%g %g %g\n", x[i], y[j], u[i][j]);

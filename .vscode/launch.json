@@ -1,28 +1,19 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
-      "request": "launch",
-      "args": [
-        ""
-      ],
-      "stopAtEntry": false,
-      "cwd": "/mnt/c/Users/Yass/Desktop/ECM3446 High Performance Computing/High-Performance-Computing-CW",
-      "environment": [],
-      "program": "/mnt/c/Users/Yass/Desktop/ECM3446 High Performance Computing/High-Performance-Computing-CW/build/Debug/outDebug",
-      "internalConsoleOptions": "openOnSessionStart",
-      "MIMode": "gdb",
-      "miDebuggerPath": "C:/Program Files (x86)/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/bin/gdb.exe",
-      "externalConsole": false,
-      "setupCommands": [
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
         {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+            "name": "(Windows) Lancer",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "C:/Users/Yass/Desktop/ECM3446 High Performance Computing/High-Performance-Computing-CW/advection2D.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "externalTerminal"
         }
-      ]
-    }
-  ]
+    ]
 }
