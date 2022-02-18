@@ -44,7 +44,7 @@ int main(){
 
   /* Grid properties */
   const int NX=1000;    // Number of x points
-  const int NY=100;    // Number of y points
+  const int NY=1000;    // Number of y points
   const float xmin=0.0; // Minimum x value
   const float xmax=30.0; // Maximum x value
   const float ymin=0.0; // Minimum y value
