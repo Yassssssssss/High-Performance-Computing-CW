@@ -65,7 +65,7 @@ int main(){
   const float bval_upper=0.0;   // Upper bounary
   
   /* Time stepping parameters */
-  const float CFL=0.9;   // CFL number 
+  const float CFL=0.55;   // CFL number 
   const int nsteps=800; // Number of time steps
 
   /* Velocity */
