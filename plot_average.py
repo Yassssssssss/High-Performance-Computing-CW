@@ -32,8 +32,8 @@ def main():
     keys = list(y.keys())
     
     plt.plot(keys, values)
-    plt.xlabel('X')
-    plt.ylabel('u(x)(y)')
+    plt.xlabel('x')
+    plt.ylabel(' Average of u(x,y)')
     plt.savefig('average.png') 
     
 
