@@ -133,7 +133,7 @@ int main(){
   FILE *initialfile;
   initialfile = fopen("initial.dat", "w");
   /* LOOP 4 */
-  /* Difficult to parallelise wrtiting to file as it has to be done in serial. I use #pragme omp parallel for ordered
+  /* Difficult to parallelise writing to file as it has to be done in serial. I use #pragma omp parallel for ordered
   as it ensures loop iteration threads enter the region in order.  */
   #pragma omp parallel for ordered
   for (int i=0; i<NX+2; i++){
@@ -198,7 +198,7 @@ int main(){
   FILE *finalfile;
   finalfile = fopen("final.dat", "w");
   /* LOOP 10 */
-  /* Difficult to parallelize wrtiting to file as it has to be done in serial. I use #pragme omp parallel for ordered
+  /* Difficult to parallelize writing to file as it has to be done in serial. I use #pragma omp parallel for ordered
   as it ensures loop iteration threads enter the region in order.  */
   #pragma omp parallel for ordered
   for (int i=0; i<NX+2; i++){
