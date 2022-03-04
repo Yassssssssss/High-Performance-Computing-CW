@@ -4,15 +4,6 @@ import matplotlib.pyplot as plt
 datContent = [i.strip().split() for i in open("./final.dat").readlines()]
 
 
-def filter_zeros(file):
-    list =[]
-    for x in file:
-        if x[2] == "0":
-            continue
-        else:
-            list.append(x)
-    return list
-
 
 def group(list):
     grouped_list = {}
@@ -25,7 +16,7 @@ def group(list):
     
 
 def average(lst):
-    return sum(lst) / len(lst)
+    return sum(lst) / (len(lst)- 2)
 
 
 def calc_Average(list):
@@ -36,14 +27,14 @@ def calc_Average(list):
 
 
 def main():
-    y = calc_Average(group(filter_zeros(datContent)))
+    y = calc_Average(group(datContent))
     values = list(y.values())
     keys = list(y.keys())
     
     plt.plot(keys, values)
     plt.xlabel('X')
     plt.ylabel('u(x)(y)')
-    plt.savefig('line_plot.png') 
+    plt.savefig('average.png') 
     
 
 
