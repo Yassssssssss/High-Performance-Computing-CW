@@ -102,6 +102,7 @@ int main(){
 
   /*** Place x points in the middle of the cell ***/
   /* LOOP 1 */
+  /* Can be parallelized */
   #pragma omp parallel for
   for (int i=0; i<NX+2; i++){
     x[i] = ( (float) i - 0.5) * dx;
@@ -109,6 +110,7 @@ int main(){
 
   /*** Place y points in the middle of the cell ***/
   /* LOOP 2 */
+  /* Can be parallelized */
   #pragma omp parallel for
   for (int j=0; j<NY+2; j++){
     y[j] = ( (float) j - 0.5) * dy;
@@ -116,6 +118,7 @@ int main(){
 
   /*** Set up Gaussian initial conditions ***/
   /* LOOP 3 */
+  /* Can be parallelized */
   #pragma omp parallel for private(x2, y2)
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
@@ -149,6 +152,7 @@ int main(){
     
     /*** Apply boundary conditions at u[0][:] and u[NX+1][:] ***/
     /* LOOP 6 */
+    /* Can be parallelized */
     #pragma omp parallel for
     for (int j=0; j<NY+2; j++){
       u[0][j]    = bval_left;
@@ -157,6 +161,7 @@ int main(){
 
     /*** Apply boundary conditions at u[:][0] and u[:][NY+1] ***/
     /* LOOP 7 */
+    /* Can be parallelized */
     #pragma omp parallel for
     for (int i=0; i<NX+2; i++){
       u[i][0]    = bval_lower;
@@ -166,6 +171,7 @@ int main(){
     /*** Calculate rate of change of u using leftward difference ***/
     /* Loop over points in the domain but not boundary values */
     /* LOOP 8 */
+    /* Can be parallelized */
     #pragma omp parallel for
     for (int i=1; i<NX+1; i++){
       for (int j=1; j<NY+1; j++){
@@ -177,6 +183,7 @@ int main(){
     /*** Update u from t to t+dt ***/
     /* Loop over points in the domain but not boundary values */
     /* LOOP 9 */
+    /* Can be parallelized */
     #pragma omp parallel for
     for	(int i=1; i<NX+1; i++){
       for (int j=1; j<NY+1; j++){
