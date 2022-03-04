@@ -1,3 +1,4 @@
+#Please ensure matplotlib is installed
 import matplotlib.pyplot as plt
 
 datContent = [i.strip().split() for i in open("./final.dat").readlines()]
