@@ -1,4 +1,3 @@
-#import pandas as pd
 import matplotlib.pyplot as plt
 
 datContent = [i.strip().split() for i in open("./final.dat").readlines()]
@@ -18,10 +17,8 @@ def group(list):
     grouped_list = {}
     for line in list:
         if float(line[0]) in grouped_list:
-            # append the new number to the existing array at this slot
             grouped_list[float(line[0])].append(float(line[2]))
         else:
-            # create a new array in this slot
             grouped_list[float(line[0])] = [float(line[2])]
     return grouped_list
     
@@ -44,8 +41,8 @@ def main():
     
     plt.plot(keys, values)
     plt.xlabel('X')
-    plt.ylabel('')
-    plt.show()
+    plt.ylabel('u(x)(y)')
+    plt.savefig('line_plot.png') 
     
 
 

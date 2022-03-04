@@ -116,6 +116,7 @@ int main(){
 
   /*** Set up Gaussian initial conditions ***/
   /* LOOP 3 */
+  #pragma omp parallel for private(x2, y2)
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
       x2      = (x[i]-x0) * (x[i]-x0);
@@ -129,9 +130,12 @@ int main(){
   FILE *initialfile;
   initialfile = fopen("initial.dat", "w");
   /* LOOP 4 */
-  #pragma omp single
+  /* Difficult to parallelise wrtiting to file as it has to be done in serial. I use #pragme omp parallel for ordered
+  as it ensures loop iteration threads enter the region in order.  */
+  #pragma omp parallel for ordered
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
+      #pragma omp ordered
       fprintf(initialfile, "%g %g %g\n", x[i], y[j], u[i][j]);
     }
   }
@@ -139,6 +143,8 @@ int main(){
   
   /*** Update solution by looping over time steps ***/
   /* LOOP 5 */
+  /* I opt to parallelize all the nested for loops as parallelizeing this loop and all the other loops
+  in it will cause the code to be erroneous and will cause the program to malfunction */
   for (int m=0; m<nsteps; m++){
     
     /*** Apply boundary conditions at u[0][:] and u[NX+1][:] ***/
@@ -185,9 +191,12 @@ int main(){
   FILE *finalfile;
   finalfile = fopen("final.dat", "w");
   /* LOOP 10 */
-  #pragma omp single
+  /* Difficult to parallelize wrtiting to file as it has to be done in serial. I use #pragme omp parallel for ordered
+  as it ensures loop iteration threads enter the region in order.  */
+  #pragma omp parallel for ordered
   for (int i=0; i<NX+2; i++){
     for (int j=0; j<NY+2; j++){
+      #pragma omp ordered
       fprintf(finalfile, "%g %g %g\n", x[i], y[j], u[i][j]);
     }
   }
